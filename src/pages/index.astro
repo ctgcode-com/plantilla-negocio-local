@@ -1,0 +1,44 @@
+---
+import Layout from '../templates/local/Layout.astro';
+import Nav from '../templates/local/Nav.astro';
+import Hero from '../templates/local/Hero.astro';
+import About from '../templates/local/About.astro';
+import Menu from '../templates/local/Menu.astro';
+import Gallery from '../templates/local/Gallery.astro';
+import LocationHours from '../templates/local/LocationHours.astro';
+import Footer from '../templates/local/Footer.astro';
+import { data } from '../templates/local/data';
+
+const title = `${data.brand.name} — ${data.brand.tagline}`;
+const description = data.hero.subtitle;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  name: data.brand.name,
+  description: data.footer.description,
+  servesCuisine: 'Colombiana',
+  priceRange: '$$',
+  image: data.hero.backgroundImage,
+  telephone: data.contact.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: data.location.address,
+    addressLocality: 'Bogotá',
+    addressCountry: 'CO',
+  },
+};
+---
+
+<Layout title={title} description={description} heroPreload={data.hero.backgroundImage}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+  </Fragment>
+  <Nav data={data} />
+  <Hero data={data} />
+  <About data={data} />
+  <Menu data={data} />
+  <Gallery data={data} />
+  <LocationHours data={data} />
+  <Footer data={data} />
+</Layout>
