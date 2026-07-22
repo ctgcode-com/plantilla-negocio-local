@@ -51,7 +51,7 @@ const whatsappUrl = `https://wa.me/${data.contact.whatsapp.replace(/[^0-9]/g, ''
             class="inline-flex items-center gap-2 rounded-full bg-amber-900 px-5 py-2.5 text-sm font-bold text-amber-50 hover:bg-amber-800 transition-colors"
           >
             <Icon name="message-circle" class="w-4 h-4" />
-            Escribir por WhatsApp
+            {data.contact.labels?.whatsapp || 'Escribir por WhatsApp'}
           </a>
           <a
             href={`tel:${data.contact.phone}`}

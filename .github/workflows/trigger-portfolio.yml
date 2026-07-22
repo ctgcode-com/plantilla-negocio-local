@@ -1,0 +1,17 @@
+name: Trigger Portfolio Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  trigger:
+    name: Dispatch Portfolio Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository_dispatch event to ctgcode.com
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PORTFOLIO_TRIGGER_TOKEN }}
+          repository: ctgcode-com/ctgcode.com
+          event-type: update-projects

@@ -2,9 +2,11 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+const basePath = process.env.BASE_PATH || '/';
+
 export default defineConfig({
-  // Reemplaza esto por el dominio definitivo del sitio.
-  site: 'https://example.com',
+  site: 'https://ctgcode.com',
+  base: basePath,
   trailingSlash: 'never',
   build: {
     format: 'directory',
