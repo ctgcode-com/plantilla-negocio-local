@@ -23,15 +23,27 @@ const whatsappUrl = `https://wa.me/${data.contact.whatsapp.replace(/[^0-9]/g, ''
           {data.location.subtitle}
         </h2>
 
-        <div class="my-6 rounded-2xl overflow-hidden border-2 border-stone-200 aspect-[16/10]">
-          <iframe
-            src={data.location.mapEmbedUrl}
-            class="w-full h-full"
-            style="border:0;"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Ubicación"
-          ></iframe>
+        {/* El mapa se monta al acercarse, no al cargar la página.
+            `loading="lazy"` no bastaba: en conexión lenta el navegador amplía
+            el umbral y lo traía igual en la carga inicial, y el embebido son
+            ~290 KB de JavaScript de terceros más los mosaicos. Con la ruta en
+            `data-src` no existe petición hasta que hace falta. Para quien
+            navega no cambia nada: el mapa sigue ahí al llegar a la sección. */}
+        <div
+          class="map-lazy my-6 rounded-2xl overflow-hidden border-2 border-stone-200 aspect-[16/10] bg-stone-100"
+          data-src={data.location.mapEmbedUrl}
+          data-title={data.location.title}
+        >
+          <noscript>
+            <iframe
+              src={data.location.mapEmbedUrl}
+              class="w-full h-full"
+              style="border:0;"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title={data.location.title}
+            ></iframe>
+          </noscript>
         </div>
 
         <div class="space-y-3">
@@ -95,3 +107,35 @@ const whatsappUrl = `https://wa.me/${data.contact.whatsapp.replace(/[^0-9]/g, ''
     </div>
   </div>
 </section>
+
+<script>
+  // Monta el mapa cuando está a punto de verse. `rootMargin` generoso para que
+  // ya esté cargado al llegar scrolleando, pero sin costar nada en la carga.
+  const holders = document.querySelectorAll<HTMLElement>('.map-lazy[data-src]');
+  if (holders.length) {
+    const mount = (el: HTMLElement) => {
+      const src = el.dataset.src;
+      if (!src) return;
+      delete el.dataset.src;
+      const frame = document.createElement('iframe');
+      frame.src = src;
+      frame.className = 'w-full h-full';
+      frame.style.border = '0';
+      frame.referrerPolicy = 'no-referrer-when-downgrade';
+      frame.title = el.dataset.title || 'Mapa de ubicación';
+      el.replaceChildren(frame);
+    };
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            obs.unobserve(e.target);
+            mount(e.target as HTMLElement);
+          }
+        }
+      },
+      { rootMargin: '400px' },
+    );
+    holders.forEach((el) => io.observe(el));
+  }
+</script>

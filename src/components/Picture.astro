@@ -64,7 +64,7 @@ const plainSrc = src.startsWith('/') ? `${basePath}${src}` : src;
         height={height}
         loading={loading}
         fetchpriority={fetchpriority}
-        decoding={loading === 'eager' ? 'sync' : 'async'}
+        decoding="async"
       />
     </picture>
   ) : (
