@@ -116,7 +116,13 @@ const breadcrumbJsonLd = {
     {/* El hero es el LCP: se preloadea en AVIF, que es lo que sirve el
         <picture> a cualquier navegador moderno. */}
     {heroPreload && (
-      <link rel="preload" as="image" href={heroPreload} type="image/avif" fetchpriority="high" />
+      <link
+        rel="preload"
+        as="image"
+        href={heroPreload.startsWith('/') ? `${basePath}${heroPreload}` : heroPreload}
+        type="image/avif"
+        fetchpriority="high"
+      />
     )}
 
     <style>
