@@ -5,7 +5,9 @@ salones, talleres y tiendas. Incluye hero, historia, menú o catálogo, galería
 horarios y ubicación con mapa. Construida con Astro y Tailwind CSS, optimizada
 para SEO y rendimiento.
 
-Forma parte del catálogo de plantillas de **[Ferser](https://ferser.co)**.
+Forma parte del catálogo de plantillas de **[CTG Code](https://ctgcode.com)**.
+La página que la explica a fondo —qué trae, qué incluye el encargo, precio y
+plazo— vive en [ctgcode.com/plantillas/negocio-local/](https://ctgcode.com/plantillas/negocio-local/).
 
 ## Stack
 
@@ -21,6 +23,24 @@ bun run dev       # http://localhost:4321
 bun run build     # genera dist/
 bun run preview   # sirve el build
 ```
+
+## Variables de entorno
+
+| Variable | Valor | Para qué |
+|---|---|---|
+| `BASE_PATH` | ruta del subdirectorio | Sirve la plantilla colgando de una ruta (`/plantilla-negocio-local`) en vez de la raíz. |
+| `PUBLIC_LOCALE` | `es` \| `en` | Idioma con el que se construye. Por defecto `es`. |
+| `PUBLIC_DEMO` | `true` | **Modo demo.** Solo para la copia de muestra publicada bajo ctgcode.com. |
+
+`PUBLIC_DEMO=true` cambia tres cosas, y las tres por el mismo motivo: la demo
+simula un negocio que no existe y no puede pasar por uno real ante un buscador.
+
+- Emite `<meta name="robots" content="noindex, follow">`.
+- **No** emite el JSON-LD del negocio (`Restaurant`, con dirección y teléfono).
+- **No** genera sitemap.
+
+Un sitio de cliente se construye SIN esa variable: ahí el negocio sí existe y
+todo eso debe salir.
 
 ## Personalización
 

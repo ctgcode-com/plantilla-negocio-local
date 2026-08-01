@@ -11,6 +11,16 @@ interface Props {
 const { title, description, noindex = false, heroPreload } = Astro.props;
 
 const locale = import.meta.env.PUBLIC_LOCALE === 'en' ? 'en' : 'es';
+
+/**
+ * Modo demo: la copia que se publica bajo ctgcode.com como muestra. Simula un
+ * negocio real que no existe, así que fuera del índice —y sin declararse como
+ * negocio en los datos estructurados—: quien posiciona es la página dedicada
+ * del estudio, no la demo. `follow` (y no `nofollow`) para que el enlace de
+ * vuelta al sitio siga contando.
+ */
+const isDemo = import.meta.env.PUBLIC_DEMO === 'true';
+
 const siteUrl = Astro.site ? Astro.site.origin : 'https://ctgcode.com';
 const rawBase = import.meta.env.BASE_URL || '/';
 const basePath = rawBase.endsWith('/') && rawBase !== '/' ? rawBase.slice(0, -1) : rawBase === '/' ? '' : rawBase;
@@ -49,7 +59,11 @@ const breadcrumbJsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {isDemo ? (
+      <meta name="robots" content="noindex, follow" />
+    ) : (
+      noindex && <meta name="robots" content="noindex, nofollow" />
+    )}
     <meta name="theme-color" content="#92400e" />
 
     <link rel="canonical" href={canonical} />
@@ -75,8 +89,11 @@ const breadcrumbJsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    {/* JSON-LD Breadcrumbs */}
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} is:inline />
+    {/* JSON-LD Breadcrumbs — no en la demo: describe una página que pedimos
+        no indexar, y la miga real la publica la página dedicada del estudio. */}
+    {!isDemo && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} is:inline />
+    )}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
