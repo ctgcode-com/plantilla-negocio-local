@@ -17,6 +17,12 @@ export default defineConfig({
   trailingSlash: 'never',
   build: {
     format: 'directory',
+    /**
+     * La hoja pesa ~6 KB: pedirla aparte costaba un viaje de red que bloqueaba
+     * el render y retrasaba el LCP. Inlinearla la elimina como recurso
+     * bloqueante. Si la plantilla crece mucho de CSS, volver a 'auto'.
+     */
+    inlineStylesheets: 'always',
   },
   integrations: isDemo ? [] : [sitemap()],
   vite: {

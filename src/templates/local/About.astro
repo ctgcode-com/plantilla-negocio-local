@@ -1,5 +1,6 @@
 ---
 import type { LocalData } from './data';
+import Picture from '../../components/Picture.astro';
 
 interface Props {
   data: LocalData;
@@ -38,7 +39,14 @@ const { data } = Astro.props;
       <div class="reveal order-1 lg:order-2" style="transition-delay: 100ms;">
         <div class="relative">
           <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
-            <img src={data.about.image} alt={data.brand.name} class="w-full h-full object-cover" loading="lazy" />
+            <Picture
+              src={data.about.image}
+              alt={data.about.imageAlt}
+              class="w-full h-full object-cover"
+              width={900}
+              height={600}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
           <div class="absolute -bottom-5 -left-5 bg-amber-500 text-stone-900 rounded-2xl px-5 py-4 shadow-xl">
             <p class="font-display text-2xl font-bold leading-none">★ 4.8</p>

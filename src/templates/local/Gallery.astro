@@ -1,5 +1,6 @@
 ---
 import type { LocalData } from './data';
+import Picture from '../../components/Picture.astro';
 
 interface Props {
   data: LocalData;
@@ -33,11 +34,11 @@ const spanClass = (span?: string) => {
           class={`reveal overflow-hidden rounded-2xl group ${spanClass(img.span)}`}
           style={`transition-delay: ${i * 50}ms;`}
         >
-          <img
+          <Picture
             src={img.src}
             alt={img.alt}
-            loading="lazy"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            sizes="(min-width: 768px) 25vw, 50vw"
           />
         </div>
       ))}

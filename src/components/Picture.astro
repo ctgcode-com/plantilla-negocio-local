@@ -1,0 +1,71 @@
+---
+/**
+ * Imagen servida en tres formatos: AVIF, WebP y JPEG.
+ *
+ * En `data.ts` cada imagen se declara una sola vez apuntando al `.avif`; este
+ * componente deriva las otras dos rutas cambiando la extensión. Los tres
+ * archivos conviven en `public/images/` con el mismo nombre — si añades una
+ * imagen, exporta los tres formatos y apunta al `.avif`.
+ *
+ * Si `src` no es un `.avif` local (una URL externa, o un `.jpg` suelto), sale
+ * un <img> normal: así el cliente puede pegar cualquier ruta sin romper nada.
+ *
+ * El <picture> lleva `contents` para salir del layout: las clases del <img> se
+ * aplican como si fuera hijo directo, y el componente es sustituto directo de
+ * un <img> allá donde ya había uno.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  class: className,
+  width,
+  height,
+  loading = 'lazy',
+  fetchpriority,
+  sizes,
+} = Astro.props;
+
+const isLocalAvif = src.startsWith('/') && src.endsWith('.avif');
+const base = isLocalAvif ? src.slice(0, -'.avif'.length) : null;
+---
+
+{
+  isLocalAvif ? (
+    <picture class="contents">
+      <source srcset={`${base}.avif`} type="image/avif" sizes={sizes} />
+      <source srcset={`${base}.webp`} type="image/webp" sizes={sizes} />
+      <img
+        src={`${base}.jpg`}
+        alt={alt}
+        class={className}
+        width={width}
+        height={height}
+        loading={loading}
+        fetchpriority={fetchpriority}
+        decoding={loading === 'eager' ? 'sync' : 'async'}
+      />
+    </picture>
+  ) : (
+    <img
+      src={src}
+      alt={alt}
+      class={className}
+      width={width}
+      height={height}
+      loading={loading}
+      fetchpriority={fetchpriority}
+      decoding={loading === 'eager' ? 'sync' : 'async'}
+    />
+  )
+}

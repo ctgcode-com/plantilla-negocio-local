@@ -95,15 +95,29 @@ const breadcrumbJsonLd = {
       <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} is:inline />
     )}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" />
+    {/* Fuentes autoalojadas (ver @font-face en _shared/base.css). Solo los
+        subsets latin se preloadean: latin-ext queda a demanda por su
+        unicode-range. */}
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={`${basePath}/fonts/inter-latin.woff2`}
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={`${basePath}/fonts/playfair-display-latin.woff2`}
+      crossorigin
     />
 
-    {heroPreload && <link rel="preload" as="image" href={heroPreload} fetchpriority="high" />}
+    {/* El hero es el LCP: se preloadea en AVIF, que es lo que sirve el
+        <picture> a cualquier navegador moderno. */}
+    {heroPreload && (
+      <link rel="preload" as="image" href={heroPreload} type="image/avif" fetchpriority="high" />
+    )}
 
     <style>
       .font-display {

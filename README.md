@@ -37,7 +37,7 @@ simula un negocio que no existe y no puede pasar por uno real ante un buscador.
 
 - Emite `<meta name="robots" content="noindex, follow">`.
 - **No** emite el JSON-LD del negocio (`Restaurant`, con dirección y teléfono).
-- **No** genera sitemap.
+- **No** genera sitemap, ni lo anuncia en `robots.txt`.
 
 Un sitio de cliente se construye SIN esa variable: ahí el negocio sí existe y
 todo eso debe salir.
@@ -46,10 +46,16 @@ todo eso debe salir.
 
 - **`src/templates/local/data.ts`** — marca, menú, galería, horarios, ubicación
   y datos de contacto. Editas ese archivo y el sitio se actualiza.
-- Las imágenes de demostración usan [Unsplash](https://unsplash.com); reemplázalas
-  por fotos reales del negocio (las URLs están en `data.ts`).
+- **`public/images/`** — las fotos de demostración. Cada una existe en tres
+  formatos con el mismo nombre (`.avif`, `.webp`, `.jpg`); en `data.ts` se
+  declara solo el `.avif` y el componente `Picture.astro` sirve el resto. Para
+  cambiarlas, exporta los tres formatos y conserva el nombre. Si pegas una URL
+  externa o un `.jpg` suelto, también funciona: sale un `<img>` normal.
+- **`public/fonts/`** — las tipografías van autoalojadas (`@font-face` en
+  `src/templates/_shared/base.css`). No se piden a Google Fonts: esa hoja
+  bloqueaba el render.
 - **`astro.config.mjs`** — ajusta `site` con el dominio definitivo (afecta el
-  canonical, el sitemap y las etiquetas Open Graph).
+  canonical, el sitemap, `robots.txt` y las etiquetas Open Graph).
 - **`public/favicon.svg`** y **`public/og.png`** — reemplázalos por los del cliente.
 
 ## Despliegue

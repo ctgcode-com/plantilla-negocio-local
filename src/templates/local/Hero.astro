@@ -2,6 +2,7 @@
 import type { LocalData } from './data';
 
 import Icon from '../../components/Icon.astro';
+import Picture from '../../components/Picture.astro';
 interface Props {
   data: LocalData;
 }
@@ -10,11 +11,19 @@ const { data } = Astro.props;
 ---
 
 <section id="top" class="relative min-h-[85vh] flex items-center overflow-hidden">
-  {/* Background image with overlay */}
-  <div
-    class="absolute inset-0 -z-10 bg-cover bg-center"
-    style={`background-image: url('${data.hero.backgroundImage}');`}
-  ></div>
+  {/* La portada es el LCP. Va como <img> y no como background-image de CSS:
+      el navegador la descubre en el HTML y arranca la descarga de inmediato,
+      en vez de esperar a resolver la hoja de estilos. */}
+  <Picture
+    src={data.hero.backgroundImage}
+    alt=""
+    class="absolute inset-0 -z-10 w-full h-full object-cover"
+    width={1280}
+    height={854}
+    loading="eager"
+    fetchpriority="high"
+    sizes="100vw"
+  />
   <div class="absolute inset-0 -z-10 bg-gradient-to-b from-stone-900/80 via-stone-900/60 to-stone-900/85"></div>
 
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">

@@ -43,6 +43,7 @@ export interface LocalData {
     title: string;
     paragraphs: string[];
     image: string;
+    imageAlt: string;
     highlights: { value: string; label: string }[];
   };
   menu: {
